@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>{{ 'ProfileTitle' | localize }}</h3>
+      <h3>Профиль</h3>
     </div>
 
     <form class="form" @submit.prevent="submitHanler">
@@ -9,23 +9,30 @@
         <input
           id="description"
           type="text"
-          :class="{invalid: $v.name.$dirty && !$v.name.required}"
+          :class="{ invalid: $v.name.$dirty && !$v.name.required }"
           v-model="name"
         />
         <label for="description">Имя</label>
         <span
           class="helper-text invalid"
           v-if="$v.name.$dirty && !$v.name.required"
-        >Поле не должно быть пустым</span>
+          >Поле не должно быть пустым</span
+        >
       </div>
 
-      <div class="switch">
-        <label>
-          English
-          <input type="checkbox" v-model="isRuLocal" />
-          <span class="lever"></span>
-          Русский
-        </label>
+      <div class="input-field">
+        <input
+          id="description"
+          type="text"
+          :class="{ invalid: $v.phone.$dirty && !$v.phone.required }"
+          v-model="phone"
+        />
+        <label for="description">Телефон</label>
+        <span
+          class="helper-text invalid"
+          v-if="$v.phone.$dirty && !$v.phone.required"
+          >Поле не должно быть пустым</span
+        >
       </div>
 
       <button class="btn waves-effect waves-light" type="submit">
@@ -45,20 +52,21 @@ export default {
   name: 'profile',
   data: () => ({
     name: '',
-    isRuLocal: true
+    phone: '',
   }),
   validations: {
-    name: { required }
+    name: { required },
+    phone: { required },
   },
   mounted() {
     this.name = this.info.name
-    this.isRuLocal = this.info.local === 'ru-RU'
+    this.phone = this.info.phone
     setTimeout(() => {
       M.updateTextFields()
     })
   },
   computed: {
-    ...mapGetters(['info'])
+    ...mapGetters(['info']),
   },
   methods: {
     ...mapActions(['updateInfo']),
@@ -71,12 +79,12 @@ export default {
       try {
         await this.updateInfo({
           name: this.name,
-          local: this.isRuLocal ? 'ru-RU' : 'en-US'
+          phone: this.phone,
         })
         this.$message(messages['updateUserProfile'])
       } catch (e) {}
-    }
-  }
+    },
+  },
 }
 </script>
 
