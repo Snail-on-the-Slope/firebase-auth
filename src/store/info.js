@@ -2,35 +2,35 @@ import firebase from 'firebase/app'
 
 export default {
     state: {
-        info: {}
+        info: null
     },
     mutations: {
         setInfo(state, info) {
             state.info = info
         },
         clearInfo(state) {
-            state.info = {}
+            state.info = null
         }
     },
     actions: {
-        async fetchInfo({ dispatch, commit }) {
+        async fetchInfo(ctx) {
             try {
-                const uid = await dispatch('getUid')
+                const uid = await ctx.dispatch('getUid')
                 const info = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
-                commit('setInfo', info)
+                ctx.commit('setInfo', info)
             } catch (e) {
-                commit('setError', e)
+                ctx.commit('setError', e)
                 throw e
             }
         },
-        async updateInfo({ dispatch, commit, getters }, toUpdate) {
+        async updateInfo(ctx, toUpdate) {
             try {
-                const uid = await dispatch('getUid')
-                const updateData = {...getters.info, ...toUpdate }
+                const uid = await ctx.dispatch('getUid')
+                const updateData = {...ctx.getters.info, ...toUpdate }
                 await firebase.database().ref(`/users/${uid}/info`).update(updateData)
-                commit('setInfo', updateData)
+                ctx.commit('setInfo', updateData)
             } catch (e) {
-                commit('setError', e)
+                ctx.commit('setError', e)
                 throw e
             }
         }

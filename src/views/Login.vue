@@ -1,45 +1,59 @@
 <template>
-  <form class="card auth-card" @submit.prevent="submitHanler">
-    <div class="card-content">
-      <span class="card-title">Домашняя бухгалтерия</span>
+  <form class="card" @submit.prevent="submitHanler">
+    <div class="card__content">
+      <span class="card__title">Вход</span>
       <div class="input-field">
         <input
           id="email"
           type="text"
-          :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
+          :class="{
+            invalid:
+              ($v.email.$dirty && !$v.email.required) ||
+              ($v.email.$dirty && !$v.email.email),
+          }"
           v-model.trim="email"
         />
         <label for="email">Email</label>
         <small
           class="helper-text invalid"
           v-if="$v.email.$dirty && !$v.email.required"
-        >Поле Email не должно быть пустым</small>
+          >Поле Email не должно быть пустым</small
+        >
         <small
           class="helper-text invalid"
           v-else-if="$v.email.$dirty && !$v.email.email"
-        >Введите коррректный Email</small>
+          >Введите коррректный Email</small
+        >
       </div>
       <div class="input-field">
         <input
           id="password"
           type="password"
-          :class="{invalid: ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength)}"
+          :class="{
+            invalid:
+              ($v.password.$dirty && !$v.password.required) ||
+              ($v.password.$dirty && !$v.password.minLength),
+          }"
           v-model.trim="password"
         />
         <label for="password">Пароль</label>
         <small
           class="helper-text invalid"
           v-if="$v.password.$dirty && !$v.password.required"
-        >Введите пароль</small>
+          >Введите пароль</small
+        >
         <small
           class="helper-text invalid"
           v-else-if="$v.password.$dirty && !$v.password.minLength"
-        >Пароль должен быть не меньше {{$v.password.$params.minLength.min}} символов. Сейчас он {{password.length}}</small>
+          >Пароль должен быть не меньше
+          {{ $v.password.$params.minLength.min }} символов. Сейчас он
+          {{ password.length }}</small
+        >
       </div>
     </div>
-    <div class="card-action">
+    <div class="card__action">
       <div>
-        <button class="btn waves-effect waves-light auth-submit" type="submit">
+        <button class="btn waves-effect waves-light card__submit" type="submit">
           Войти
           <i class="material-icons right">send</i>
         </button>
@@ -54,18 +68,18 @@
 </template>
 
 <script>
-import { email, required, minLength } from 'vuelidate/lib/validators'
+import { email, required, minLength, maxLength } from 'vuelidate/lib/validators'
 import messages from '@/utils/messages'
 
 export default {
   name: 'login',
   data: () => ({
     email: '',
-    password: ''
+    password: '',
   }),
   validations: {
     email: { email, required },
-    password: { required, minLength: minLength(6) }
+    password: { required, minLength: minLength(6), maxLength: maxLength(40) },
   },
   mounted() {
     if (messages[this.$route.query.message]) {
@@ -79,16 +93,16 @@ export default {
         return
       }
       const formData = {
-        // для отправки на back
         email: this.email,
-        password: this.password
+        password: this.password,
       }
 
       try {
         await this.$store.dispatch('login', formData)
+        await this.$store.dispatch('fetchInfo')
         this.$router.push('/')
       } catch (e) {}
-    }
-  }
+    },
+  },
 }
 </script>

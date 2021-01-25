@@ -4,13 +4,14 @@ import firebase from 'firebase/app'
 
 Vue.use(VueRouter)
 
-const routes = [{
-        path: '/',
-        name: 'Home',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/Home.vue')
-    },
+const routes = [
+    // {
+    //     path: '/',
+    //     name: 'Home',
+    //     meta: { layout: 'main', auth: true },
+    //     component: () =>
+    //         import ('../views/Home.vue')
+    // },
     {
         path: '/login',
         name: 'Lodin',
@@ -26,46 +27,11 @@ const routes = [{
             import ('../views/Register.vue')
     },
     {
-        path: '/categories',
-        name: 'Categories',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/Categories.vue')
-    },
-    {
-        path: '/detail/:id',
-        name: 'DetailRecord',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/DetailRecord.vue')
-    },
-    {
-        path: '/history',
-        name: 'History',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/History.vue')
-    },
-    {
-        path: '/planning',
-        name: 'Planning',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/Planning.vue')
-    },
-    {
-        path: '/profile',
+        path: '/',
         name: 'Profile',
         meta: { layout: 'main', auth: true },
         component: () =>
             import ('../views/Profile.vue')
-    },
-    {
-        path: '/record',
-        name: 'Record',
-        meta: { layout: 'main', auth: true },
-        component: () =>
-            import ('../views/Record.vue')
     }
 ]
 

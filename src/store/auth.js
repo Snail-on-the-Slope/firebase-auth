@@ -1,26 +1,25 @@
 import firebase from 'firebase/app'
-import { register } from 'register-service-worker'
 
 export default {
     actions: {
-        async login({ dispatch, commit }, { email, password }) {
+        async login(ctx, { email, password }) {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password)
             } catch (e) {
-                commit('setError', e)
+                ctx.commit('setError', e)
                 throw e
             }
         },
-        async register({ dispatch, commit }, { email, password, name }) {
+        async register(ctx, { email, password, name, phone }) {
             try {
                 await firebase.auth().createUserWithEmailAndPassword(email, password)
-                const uid = await dispatch('getUid')
+                const uid = await ctx.dispatch('getUid')
                 await firebase.database().ref(`/users/${uid}/info`).set({
-                    bill: 10000,
-                    name
+                    name,
+                    phone
                 })
             } catch (e) {
-                commit('setError', e)
+                ctx.commit('setError', e)
                 throw e
             }
         },
@@ -28,9 +27,9 @@ export default {
             const user = firebase.auth().currentUser
             return user ? user.uid : null
         },
-        async logout({ commit }) {
+        async logout(ctx) {
             await firebase.auth().signOut()
-            commit('clearInfo')
+            ctx.commit('clearInfo')
         }
     }
 }
