@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/firebase-auth/precache-manifest.1f2e117449a7d9e9134def33290ea36d.js"
+  "/firebase-auth/precache-manifest.30279f2239d4eba2877d2432cf004ae0.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "crm-project"});
